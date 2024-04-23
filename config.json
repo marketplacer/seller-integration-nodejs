@@ -1,0 +1,6 @@
+{
+    "marketplacerApiKey" : "<INSERT VALUE HERE>",
+    "marketplacerApiEndpoint" : "<INSERT VALUE HERE>",
+    "basicAuthUsername" : "<INSERT VALUE HERE>",
+    "basicAuthPassword" : "<INSERT VALUE HERE>"
+}
