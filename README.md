@@ -82,6 +82,9 @@ Your `config.json` file should look something like this (remembering to save it 
 }
 ```
 
+> [!CAUTION]
+> Production instance credentials should not be used with this app. You should use only dedicated staging and test credentials. Irrespective, you should be careful not to let this config "leak" anywhere. You may want to untrack the `config.json` from a Git perspective and or update the `.gitconfig` file to exclude it.
+
 6. Run NPM install
 
 We have kept external packages to a minimum but we are using `faker/js` to help generate test product data, so to ensure you have the package locally type:
