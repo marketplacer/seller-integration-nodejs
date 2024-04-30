@@ -17,8 +17,8 @@ This app is intended to help sellers and channel managers new to Marketplacer to
 
 The app is written in JavaScript using node.js. It is intended to be a lightweight demonstration of the core concepts a seller should be aware of when integrating into Marketplacer. 
 
-> [!IMPORTANT]
-> It is not intended to be a production-ready solution, for more detail please refer to the [license](./LICENSE).
+> [!CAUTION]
+> This project is not intended to be a production-ready solution, nor is it covered by Marketplacer support - for more information on the full terms of use, please refer to the [license](./LICENSE).
 
 The app attempts to use as few external packages as possible, keeping it simple, and focused on the concepts at hand. For example:
 
