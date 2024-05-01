@@ -12,7 +12,7 @@ class Menu {
     `;
 
     static license = `\x1b[2m    The license covering the usage of this software can be found here:
-    https://github.com/binarythistle/seller-integration-nodejs?tab=MIT-1-ov-file\x1b[0m
+    https://github.com/marketplacer/seller-integration-nodejs/blob/main/LICENSE\x1b[0m
     `;
     
     // Methods
