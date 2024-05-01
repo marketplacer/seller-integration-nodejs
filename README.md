@@ -1,6 +1,7 @@
 # Marketplacer Seller Integration with Node.js
 
-![image](https://github.com/binarythistle/seller-integration-nodejs/assets/815719/a2346614-ad8f-42e1-a5fe-d4864a1a2b0b)
+![image](https://github.com/marketplacer/seller-integration-nodejs/assets/815719/0aa0f41f-cb56-45af-8b83-812902977623)
+
 
 
 This is a simple Node.js seller integration into Marketplacer using the GraphQL Seller API
@@ -113,7 +114,8 @@ Your endpoint is set to: https://amazingbuy.marketplacer.com/graphql
 Choose an option (1 - 4):
 ```
 We have 4 options to pick from that depict a standard flow a Seller would typically follow when integrating into Marketplacer:
-![image](https://github.com/binarythistle/seller-integration-nodejs/assets/815719/dd2bfd19-44ec-48e5-83c1-58cc48a72edd)
+
+![image](https://github.com/marketplacer/seller-integration-nodejs/assets/815719/83b4bbd1-48f8-422e-888c-7a3f5edf6da9)
 
 
 #### 1. Generate test products data file
