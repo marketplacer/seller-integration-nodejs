@@ -7,6 +7,7 @@ const gqlOperationLibrary = require('./GQLOperationLibrary/GQLOperationLibrary.j
 const encodeDecode = require('./Utility/EncodeDecode.js');
 const { faker } = require('@faker-js/faker');
 const readline = require('readline');
+const JSONProcessing = require('./Utility/JSONProcessing.js');
 
 
 const rl = readline.createInterface({
@@ -183,21 +184,32 @@ function promptUser() {
         } else if (answer === '4') {
             rl.question('Please enter an Invoice number, e.g. 10233 \n', (invoiceNumber) => {
                 console.log(`-> Checking invoice: ${invoiceNumber}`);
-                const graphQLInvoiceID = encodeDecode.constructGqlId(invoiceNumber, 'Invoice');
-                console.log(`--> GraphQL Invoice ID: ${graphQLInvoiceID}`);
 
                 (async () => {
-                    const invoiceVariables = {
-                        id: graphQLInvoiceID,
+                    
+                    const legacyIdVariables = {
+                        first: 1,
+                        filters: {
+                            legacyId: parseInt(invoiceNumber, 10)
+                        }
                     };
 
-                    const invoice = await _dataService.gqlRequest(gqlOperationLibrary.getIndividualInvoice, 'getInvoice', invoiceVariables);
-                    if (invoice.data.node === null) {
+                    const invoice = await _dataService.gqlRequest(gqlOperationLibrary.getInvoiceByLegacyId, 'getInvoiceByLegacyId', legacyIdVariables);
+                    console.log(JSON.stringify(invoice));
+                    
+                    
+                    if (invoice.data.invoices.totalCount === 0) {
                         console.log('---> Could not find that invoice - API returns null');
                         return;
                     }
 
-                    if (jsonProcessing.attemptToShip(invoice.data.node.statusFlags)) {
+                    const individualInvoice = {
+                        data: {
+                            node: invoice.data.invoices.nodes[0]
+                        }
+                    }
+
+                    if(jsonProcessing.attemptToShip(individualInvoice.data.node.statusFlags)){
                         console.log('\n Generating list of Shipment Carriers...');
                     
                         const carrierIDs = await generateShipmentCarriers();
@@ -205,13 +217,12 @@ function promptUser() {
                         const randomCarrierId = randomCarrier(carrierIDs);
     
                         console.log(`--> Random Carrier ID selected: ${randomCarrierId}`);
-                        const shippedItems = jsonProcessing.buildShippableLineItemsList(invoice);
-
-                        //console.log(`shippedItems JSON ${JSON.stringify(shippedItems)}`);
-
+                        
+                        const shippedItems = JSONProcessing.buildShippableLineItemsList(individualInvoice);
+             
                         var shipmentCreateVariables = {
                             input: {
-                                invoiceId: graphQLInvoiceID,
+                                invoiceId: individualInvoice.data.node.id,
                                 dispatchedAt: new Date().toISOString(),
                                 note: faker.word.words(),
                                 postageCarrierId: randomCarrierId,
