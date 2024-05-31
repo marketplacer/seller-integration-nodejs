@@ -191,6 +191,40 @@ class GQLOperationLibrary {
     }
     `;
 
+    static getInvoiceByLegacyId = `
+    query getInvoiceByLegacyId($first: Int, $filters: InvoiceFilters) {
+      invoices(first: $first, filters: $filters) {
+        totalCount
+        nodes {
+          legacyId
+          id
+          statusFlags
+          lineItems {
+            id
+            legacyId
+            quantity
+            variantId
+            status
+          }
+          shipments {
+            id
+            trackingLink
+            trackingNumber
+            carrier
+            shippedItems {
+              id
+              lineItem {
+                id
+              }
+              quantity
+            }
+          }
+        }
+      }
+    }
+    
+    `;
+
     static getShipmentCarriers =  `
     query getShipmentCarriers($pageSize: Int, $endCursor: String) {
       shipmentCarriers(first: $pageSize, after: $endCursor) {
