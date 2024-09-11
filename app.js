@@ -39,7 +39,7 @@ jsonFileManager.checkAndCreateFolder('./DataFiles/');
 
 
 function promptUser() {
-    rl.question('Choose an option (1 - 4): \n', (answer) => {
+    rl.question('Choose an option (1 - 5): \n', (answer) => {
         if (answer === '1') {
             console.log("Attempting test product creation...");
 
@@ -81,7 +81,7 @@ function promptUser() {
 
                 let productsToWrite = [];
 
-                for (let i = 0; i < 10; i++) {
+                for (let i = 0; i < 300; i++) {
 
                     const randomBrandId = randomBrand(brands);
                     console.log(`---> Random Brand Id ${randomBrandId}`);
@@ -246,9 +246,67 @@ function promptUser() {
 
                 rl.close();
             });
+        } else if (answer === '5') {
+            console.log(`---> \x1b[31m"You are going to delete products!!\x1b[0m`);
+            (async () => {
+                // Get the Seller Id for the API Key Principal
 
+                const seller = await _dataService.gqlRequest(gqlOperationLibrary.getSellerId, 'getSellerIdForKeyHolder', null);
+                const sellerId = seller.data.apiKeyPrincipal.seller.id;
+                console.log(sellerId);
+                
+                const advertWhereVariables = {
+                    first: 10,
+                    after: null,
+                    sellerIds: [ sellerId ]
+                };
+
+                let hasNextPage = true;
+                let pageNumber = 0;
+                let advertIds = new Set();
+
+                while (hasNextPage) {
+                    pageNumber++;
+                    console.log(`--> PAGE ${pageNumber}`);
+                    const adverts = await _dataService.gqlRequest(gqlOperationLibrary.getSellerProducts, 'GetAllSellerProducts', advertWhereVariables);
+
+                    for (const advert of adverts.data.advertsWhere.nodes) {
+                        //console.log(`---> Adding Advert ID: ${advert.id}`);
+                        advertIds.add(advert.id);
+                    }
+
+                    if (adverts.data.advertsWhere.pageInfo.hasNextPage) {
+                        advertWhereVariables.after = adverts.data.advertsWhere.pageInfo.endCursor;
+                        console.log(`--> End Cursor: ${adverts.data.advertsWhere.pageInfo.endCursor}`);
+                    } else {
+                        hasNextPage = false;
+                    }
+
+
+                    for (let id of advertIds) {
+                        console.log(id);
+                        
+                        var deleteAdvertVariables = {
+                            input: {
+                                id: id
+                            }
+                        }
+
+                        const deleteAdvert = await _dataService.gqlRequest(gqlOperationLibrary.deleteAdvert, 'deleteAdvert', deleteAdvertVariables);
+
+                        console.log(`--> deleteAdvert response: 
+                            ${JSON.stringify(deleteAdvert)}
+                        `)
+                    }
+                    
+                }
+
+
+            })();  
+            rl.close();
         } else {
             console.log("Numbers 1 - 4 is all we accept here!");
+            
             rl.close();
         }
     });

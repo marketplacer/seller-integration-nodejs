@@ -30,6 +30,7 @@ class Menu {
         console.log("2. Ingest your test products into Marketplacer");
         console.log("3. Retrieve your orders from Marketplacer");
         console.log("4. Dispatch your orders");
+        console.log("5. Delete ALL products");
     }
 }
 

@@ -37,7 +37,7 @@ class GQLOperationLibrary {
               name
               id
             }
-            children(first: 5) {
+            children(first: 10) {
               nodes {
                 id
                 displayName
@@ -45,7 +45,7 @@ class GQLOperationLibrary {
                   name
                   id
                 }
-                children(first: 5) {
+                children(first: 10) {
                   nodes {
                     id
                     displayName
@@ -53,7 +53,7 @@ class GQLOperationLibrary {
                       name
                       id
                     }
-                    children(first: 5) {
+                    children(first: 10) {
                       nodes {
                         id
                         displayName
@@ -61,7 +61,7 @@ class GQLOperationLibrary {
                           name
                           id
                         }
-                        children(first: 5) {
+                        children(first: 10) {
                           nodes {
                             id
                             displayName
@@ -254,6 +254,59 @@ class GQLOperationLibrary {
           id
         }
       }
+    }
+    `;
+
+    static getSellerId = `
+    query getSellerIdForKeyHolder{
+	    apiKeyPrincipal{
+		    emailAddress
+		    name
+        seller{
+          businessName
+          id
+        }
+	    }
+    }
+    `;
+
+    static getSellerProducts = `
+    query GetAllSellerProducts(
+	    $pageSize: Int
+	    $endCUrsor: String
+	    $sellerIds: [ID!]
+    ) {
+	    advertsWhere(
+		    first: $pageSize, 
+		    after: $endCUrsor, 
+		    retailerIds: $sellerIds
+	    ) {
+		    totalCount
+		    pageInfo {
+			    hasNextPage
+			    endCursor
+		    }
+		    nodes {
+			    id
+		    }
+	    }
+    }
+    `;
+
+    static deleteAdvert = `
+    mutation deleteAdvert($input: AdvertDeleteMutationInput!){
+	    advertDelete(input: $input)
+	    {
+		    status
+		    advert{
+			    id
+			    legacyId
+		    }
+		    errors{
+			    field
+		  	  messages
+		    }
+	    }
     }
     `;
 }
